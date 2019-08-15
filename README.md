@@ -58,3 +58,5 @@ Built With
 Sublime Text - Text Editor
 Author
 Lloyd Humphries
+link to video that displays the functions being used
+https://drive.google.com/file/d/1Nz3y9i_BIXGr40S8Ti6kK47Op4RVLatS/view
