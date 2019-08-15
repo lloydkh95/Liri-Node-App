@@ -15,7 +15,7 @@ const keys = require("./keys.js");
 
 //initialize spotify
 const Spotify = require("node-spotify-api");
-const Spotify = new Spotify(keys.spotify);
+const Spotify2 = new Spotify(keys.spotify);
 
 // OMDB and BANDS command and input
 let omdb = (keys.omdb);
@@ -28,6 +28,7 @@ let userQuery = process.argv.slice(3).join(".");
 //APP lOGIC
 function userCommand(userInput, userQuery) {
     // make a decision based on the command
+    console.log(userInput);
     switch (userInput) {
         case "concert-this":
             concertThis();
@@ -39,7 +40,7 @@ function userCommand(userInput, userQuery) {
             movieThis();
             break;
         case "do-this":
-            doThis(userQuery);
+            doThis();
             break;
         default:
             console.log("I don't understand");
@@ -53,7 +54,7 @@ function concertThis() {
     console.log(`\n = = = = =\n\nSEARCHING FOR...${userQuery}'s next show...`);
     // USER REQUEST AS OUR QUERY URL USING OUR USER QUERY VARIABLE AS THE PARAMETERS OF OUR SECTION
     request("https://rest.bandsintown.com/artists/" + userQuery + "/events?app_id=" + bandsintown,
-        response, body) {
+        function (error, response, body) {
         //IF THERE IS NO ERROR GITVE US A 200 STATUS CODE (EVERYTHING OK!)
         if (!error && response.statusCode === 200) {
             // CAPTURE DATA AND USE JSON TO FORMAT
@@ -76,7 +77,7 @@ function concertThis() {
                 console.log(`Band or concert not Found!`);
             };
         };
-    };
+    });
 };
 
 function spotifyThisSong() {
@@ -86,7 +87,7 @@ function spotifyThisSong() {
     if (!userQuery) { userQuery = "the sign ace of bas" };
 
     // SPOTIFY SEARCH QUERY FORMAT
-    spotify.search({ type: 'track', query: userQuery, limit: 1 }, function (error, data) {
+    Spotify2.search({ type: 'track', query: userQuery, limit: 1 }, function (error, data) {
         if (error) {
             return console.log('Error ocurred: ' + error);
         }
@@ -105,8 +106,11 @@ function movieThis() {
     console.log(`\n = = = = = \n\nSEARCHING FOR..."${userQuery}"`);
     if (!userQuery) { userQuery = "mr nobody"; };
     // REQUEST USING OMDB API
-    request("http://www.omdbapi.com/?t=" + userQuery + "&apikey=86fe999c", function (error, request response))
-    let userMovie = JSON.parse(body);
+    request("http://www.omdbapi.com/?t=" + userQuery + "&apikey=86fe999c", function (error, request, response){
+        console.log(response);
+        let userMovie = JSON.parse(response);   
+    
+    
 
     // CAPTURE ROTTEN TOMATOES RATING INTO AN ARRAY
     let ratingsArr = userMovie.Ratings;
@@ -120,7 +124,7 @@ function movieThis() {
     }
     else {
         return console.log("Movie able to be found. Error:" + error)
-    };
+    }; })
 }
 
 
